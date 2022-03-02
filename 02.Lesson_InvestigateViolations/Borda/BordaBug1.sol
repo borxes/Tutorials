@@ -30,7 +30,8 @@ contract Borda is IBorda {
     // current max points 
     uint256 pointsOfWinner; 
 
-    constructor() public {
+    // removed public visibility from constructor, since it's ignored
+    constructor()  {
         winner = address(0);
         pointsOfWinner = 0;
     }
@@ -89,8 +90,10 @@ contract Borda is IBorda {
 
         _voters[msg.sender].voted = true;
         voteTo(first, 3);
-        voteTo(second, 3);
-        voteTo(third, 3);
+        //@note the second candidate was given 3 points instead of 2
+        voteTo(second, 2);
+        //@note the third candidate was given 3 points instead of 1
+        voteTo(third, 1);
         
         return true;
     }

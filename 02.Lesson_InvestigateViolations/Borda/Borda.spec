@@ -58,6 +58,7 @@ rule contendersPointsNondecreasing(method f, address contender){
     uint8 age; bool registeredBefore; uint256 pointsBefore;
     age, registeredBefore, pointsBefore = getFullContenderDetails(e, contender);
     require pointsBefore > 0 => registeredBefore; // why is this needed? try to omit this line and see what happens
+    // needed because the tool assumes all possible input values as a starting state
     f(e,args);
     bool registeredAfter; uint256 pointsAfter;
     age, registeredAfter, pointsAfter = getFullContenderDetails(e, contender);
