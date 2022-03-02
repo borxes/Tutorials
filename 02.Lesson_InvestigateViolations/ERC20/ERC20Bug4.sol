@@ -180,6 +180,8 @@ contract ERC20 is IERC20, IERC20Metadata {
         uint256 amount
     ) public virtual override returns (bool) {
         uint256 currentAllowance = _allowances[sender][msg.sender];
+        //@note add a test on unchecked substraction in the allowance parameter
+        require(currentAllowance - amount <= currentAllowance);
         unchecked {
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -353,7 +355,8 @@ contract ERC20 is IERC20, IERC20Metadata {
     ) internal virtual {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
-        _allowances[owner][spender] = amount*9;
+        //@note allowances was being set to amount * 9
+        _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
 

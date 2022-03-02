@@ -60,15 +60,17 @@ rule balanceChangesFromCertainFunctions(method f, address user){
 // Checks that the totalSupply of the token is at least equal to a single user's balance
 // This rule breaks also on a fixed version of ERC20 -
 // why? understand the infeasible state that the rule start with 
-rule totalSupplyNotLessThanSingleUserBalance(method f, address user) {
-	env e;
-	calldataarg args;
-	uint256 totalSupplyBefore = totalSupply(e);
-    uint256 userBalanceBefore = balanceOf(e, user);
-    f(e, args);
-    uint256 totalSupplyAfter = totalSupply(e);
-    uint256 userBalanceAfter = balanceOf(e, user);
-	assert totalSupplyBefore >= userBalanceBefore => 
-            totalSupplyAfter >= userBalanceAfter,
-        "a user's balance is exceeding the total supply of token";
-}
+// this rule is not meant to be fixed at this stage of the tutorial
+
+// rule totalSupplyNotLessThanSingleUserBalance(method f, address user) {
+// 	env e;
+// 	calldataarg args;
+// 	uint256 totalSupplyBefore = totalSupply(e);
+//     uint256 userBalanceBefore = balanceOf(e, user);
+//     require totalSupplyBefore >= userBalanceBefore;
+//     f(e, args);
+//     uint256 totalSupplyAfter = totalSupply(e);
+//     uint256 userBalanceAfter = balanceOf(e, user);
+// 	assert totalSupplyAfter >= userBalanceAfter,
+//         "a user's balance is exceeding the total supply of token";
+// }
