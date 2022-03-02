@@ -124,6 +124,8 @@ contract MeetingScheduler is IMeetingScheduler {
             "can only join to a meeting that has started"
         );
         meetings[meetingId].numOfParticipents++;
-        meetings[meetingId].status = MeetingStatus.ENDED;
+
+        //@note meeting status was erroneously being set to ENDED
+        //meetings[meetingId].status = MeetingStatus.ENDED;
     }
 }
