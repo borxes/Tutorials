@@ -17,6 +17,24 @@ function getVoterRegistered(address voter) returns bool {
     return voterReg;
 }
 
+function getVoterVoted(address voter) returns bool {
+    uint256 age; bool voterReg; bool voted; uint256 vote_attempts; bool blocked;
+    age, voterReg, voted, vote_attempts, blocked = getFullVoterDetails(voter);
+    return voted;
+
+}
+
+
+// registeredYetVotedVoter - for a registered voter that hasn't voted yet.
+// legitRegisteredVotedVoter - for a registered voter that has voted but isn't blocked.
+// blockedVoter - for a registered voter that has voted, and is blocked.
+
+definition notRegisteredUser(address voter) returns bool =  !getVoterRegistered(voter);
+definition legitRegisteredVotedVoter(address voter) returns bool = getVoterRegister(voter) && getVoterVoted(voter);
+definition registeredYetVotedVoter(address voter) returns bool = getVoterVoted(voter) && !getVoterBlocked(voter);
+definition blockedVoter(address voter) returns bool = getVoterVoted(voter) && getVoterBlocked(voter);
+
+
 
 // Checks that a voter's "registered" mark is changed correctly - 
 // If it's false after a function call, it was false before
