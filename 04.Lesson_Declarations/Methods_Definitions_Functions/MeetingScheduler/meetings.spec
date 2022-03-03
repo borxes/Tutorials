@@ -1,3 +1,13 @@
+methods {
+	getStartTimeById(uint256) returns (uint256) envfree
+	getEndTimeById(uint256) returns (uint256) envfree
+	getStateById(uint256) returns (uint8) envfree
+	getNumOfParticipents(uint256) returns (uint256) envfree
+	scheduleMeeting(uint256, uint256, uint256)
+	startMeeting(uint256)
+	endMeeting(uint256)
+}
+
 /*  Representing enums
 
     enums are supported by the Certora Verification Language (CVL), 
@@ -20,8 +30,8 @@
 rule startBeforeEnd(method f, uint256 meetingId, uint256 startTime, uint256 endTime) {
 	env e;
     scheduleMeeting(e, meetingId, startTime, endTime);
-    uint256 scheduledStartTime = getStartTimeById(e, meetingId);
-    uint256 scheduledEndTime = getEndTimeById(e, meetingId);
+    uint256 scheduledStartTime = getStartTimeById(meetingId);
+    uint256 scheduledEndTime = getEndTimeById(meetingId);
 
 	assert scheduledStartTime < scheduledEndTime, "the created meeting's start time is not before its end time";
 }
@@ -31,11 +41,11 @@ rule startBeforeEnd(method f, uint256 meetingId, uint256 startTime, uint256 endT
 rule startOnTime(method f, uint256 meetingId) {
 	env e;
 	calldataarg args;
-	uint8 stateBefore = getStateById(e, meetingId);
+	uint8 stateBefore = getStateById(meetingId);
 	f(e, args); // call only non reverting paths to any function on any arguments.
-	uint8 stateAfter = getStateById(e, meetingId);
-    uint256 startTimeAfter = getStartTimeById(e, meetingId);
-    uint256 endTimeAfter = getEndTimeById(e, meetingId);
+	uint8 stateAfter = getStateById(meetingId);
+    uint256 startTimeAfter = getStartTimeById(meetingId);
+    uint256 endTimeAfter = getEndTimeById(meetingId);
     
 	assert (stateBefore == 1 && stateAfter == 2) => startTimeAfter <= e.block.timestamp, "started a meeting before the designated starting time.";
 	assert (stateBefore == 1 && stateAfter == 2) => endTimeAfter > e.block.timestamp, "started a meeting after the designated end time.";
@@ -48,9 +58,9 @@ rule startOnTime(method f, uint256 meetingId) {
 rule checkStartedToStateTransition(method f, uint256 meetingId) {
 	env e;
 	calldataarg args;
-	uint8 stateBefore = getStateById(e, meetingId);
+	uint8 stateBefore = getStateById(meetingId);
 	f(e, args);
-    uint8 stateAfter = getStateById(e, meetingId);
+    uint8 stateAfter = getStateById(meetingId);
 	
 	assert (stateBefore == 2 => (stateAfter == 2 || stateAfter == 3)), "the status of the meeting changed from STARTED to an invalid state";
 	assert ((stateBefore == 2 && stateAfter == 3) => f.selector == endMeeting(uint256).selector), "the status of the meeting changed from STARTED to ENDED through a function other then endMeeting()";
@@ -63,9 +73,9 @@ rule checkStartedToStateTransition(method f, uint256 meetingId) {
 rule checkPendingToCancelledOrStarted(method f, uint256 meetingId) {
 	env e;
 	calldataarg args;
-	uint8 stateBefore = getStateById(e, meetingId);
+	uint8 stateBefore = getStateById(meetingId);
 	f(e, args);
-    uint8 stateAfter = getStateById(e, meetingId);
+    uint8 stateAfter = getStateById(meetingId);
 	
 	assert (stateBefore == 1 => (stateAfter == 1 || stateAfter == 2 || stateAfter == 4)), "invalidation of the state machine";
 	assert ((stateBefore == 1 && stateAfter == 2) => f.selector == startMeeting(uint256).selector), "the status of the meeting changed from PENDING to STARTED through a function other then startMeeting()";
@@ -77,10 +87,10 @@ rule checkPendingToCancelledOrStarted(method f, uint256 meetingId) {
 rule monotonousIncreasingNumOfParticipants(method f, uint256 meetingId) {
 	env e;
 	calldataarg args;
-    require getStateById(e, meetingId) == 0 => getNumOfParticipents(e, meetingId) == 0;
-	uint256 numOfParticipantsBefore = getNumOfParticipents(e, meetingId);
+    require getStateById(meetingId) == 0 => getNumOfParticipents(meetingId) == 0;
+	uint256 numOfParticipantsBefore = getNumOfParticipents(meetingId);
 	f(e, args);
-    uint256 numOfParticipantsAfter = getNumOfParticipents(e, meetingId);
+    uint256 numOfParticipantsAfter = getNumOfParticipents(meetingId);
 
 	assert numOfParticipantsBefore <= numOfParticipantsAfter, "the number of participants decreased as a result of a function call";
 }
