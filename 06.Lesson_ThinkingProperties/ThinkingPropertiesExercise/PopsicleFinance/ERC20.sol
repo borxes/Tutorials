@@ -11,7 +11,7 @@ contract ERC20 {
     string public symbol;
     uint public decimals;
 
-    function myAddress() public returns (address) {
+    function myAddress() public view returns (address) {
         return address(this);
     }
 
