@@ -1,0 +1,5 @@
+- depot owner is not 0
+- each created event has an owner
+- owner balance only goes up (ignoring external events)
+- depot owner balance only goes up (ignoring external transfers)
+- ticketsRemaining only decreases

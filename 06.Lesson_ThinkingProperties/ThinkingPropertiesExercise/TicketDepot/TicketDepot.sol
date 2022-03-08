@@ -51,13 +51,22 @@ contract TicketDepot {
         {  
             revert();
 		} 
+
+
+
         ticketID = eventsMap[_eventID].ticketsRemaining;
         eventsMap[_eventID].ticketsRemaining--;
 		eventsMap[_eventID].attendees[ticketID] = _attendee;
-        // paying the owner of the event the ticket price
-		payable(eventsMap[_eventID].owner).transfer(eventsMap[_eventID].ticketPrice);
+
+
+		// payable(eventsMap[_eventID].owner).transfer(eventsMap[_eventID].ticketPrice);
+
+        address eventOwner = eventsMap[_eventID].owner;
+        eventOwner.call{value: eventsMap[_eventID].ticketPrice}("");
+
         // paying the owner of the depot the transaction fee
-        payable(owner).transfer(transactionFee);
+        // payable(owner).transfer(transactionFee);
+        owner.call{value: transactionFee}("");
         
 	} 
 
@@ -88,4 +97,17 @@ contract TicketDepot {
 			delete offerings[offerID];  
 	} 
 
-} 
+	function getEvent(uint16 _eventID) public view returns (
+		address eventOwner, 
+		uint64 ticketPrice,
+		uint16 ticketsRemaining) {
+		eventOwner = eventsMap[_eventID].owner;
+		ticketPrice = eventsMap[_eventID].ticketPrice;
+		ticketsRemaining = eventsMap[_eventID].ticketsRemaining;
+	}
+
+	function getOwnerBalance() public view returns (uint) {
+		return owner.balance;
+	}
+
+}

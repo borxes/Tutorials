@@ -1,0 +1,3 @@
+- user balance increases after deposit
+- user has 0 fees to collect after calling collectFees
+- user assets decrease only after calling withdraw() or collectFees()
