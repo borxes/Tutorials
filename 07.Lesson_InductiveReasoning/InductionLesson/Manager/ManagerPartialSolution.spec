@@ -17,6 +17,7 @@ rule uniqueManager(uint256 fundId1, uint256 fundId2, method f) {
 				
 	env e;
 
+
 	// if we don't use this, then the following error happens:
 	// another fund management is claimed, where pending was manager of fund 1.
 	// so that manager of fund1 becomes inactive and assert fails.
