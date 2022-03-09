@@ -18,7 +18,7 @@ Consider the [Bank contract from lesson 1](Bank/BankFixed.sol). An important pro
 Let's take a look at the Bank's `withdraw` method and see if it has this
 property:
 
-```soldity
+```solidity
 function withdraw() public returns (bool success)  {
     uint256 amount = getFunds(msg.sender);
     funds[msg.sender] = 0;
