@@ -1,6 +1,5 @@
-certoraRun ERC20Fixed.sol:ERC20 --verify ERC20:ERCVacuity.spec \
+certoraRun ERC20Bug1.sol:ERC20 --verify ERC20:Sanity.spec \
 --solc solc8.0 \
 --staging \
---send_only \
 --optimistic_loop \
 --msg "$1"

@@ -33,7 +33,8 @@ rule eachEventHasOwner(uint64 ticketPrice, uint16 ticketsAvailable) {
 rule ownerBalanceOnlyGoesUp(method f) {
     env e;
     uint balanceBefore = getOwnerBalance();
-    f(e);
+    calldataarg args;
+    f(e, args);
     uint balanceAfter = getOwnerBalance();
     assert balanceAfter >= balanceBefore;
 }
@@ -41,7 +42,8 @@ rule ownerBalanceOnlyGoesUp(method f) {
 rule ticketsRemainingDecreases(method f, uint64 ticketPrice, uint16 ticketsAvailable) {
     env e;
     uint16 eventId = createEvent(e, ticketPrice, ticketsAvailable);
-    f(e);
+    calldataarg args;
+    f(e, args);
     address ownerAfter; uint64 priceAfter; uint16 ticketsAfter;
     ownerAfter, priceAfter, ticketsAfter = getEvent(e, eventId);
     assert ticketsAfter <= ticketsAvailable;

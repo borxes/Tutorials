@@ -55,7 +55,7 @@ contract TicketDepot {
 
 
         ticketID = eventsMap[_eventID].ticketsRemaining;
-        eventsMap[_eventID].ticketsRemaining--;
+        eventsMap[_eventID].ticketsRemaining++;
 		eventsMap[_eventID].attendees[ticketID] = _attendee;
 
 

@@ -1,4 +1,4 @@
 {
-    "solidity.compileUsingRemoteVersion": "v0.6.0+commit.26b70077",
+    "solidity.compileUsingRemoteVersion": "v0.8.7+commit.e28d00a7",
     "solidity.defaultCompiler": "remote"
 }
